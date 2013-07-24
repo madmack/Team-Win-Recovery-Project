@@ -20,6 +20,11 @@
 #include "mtdutils/mtdutils.h"
 #include "verifier.h"
 #include "variables.h"
+#ifdef ENABLE_LOKI
+extern "C" {
+#include "compact_loki.h"
+}
+#endif
 #include "data.hpp"
 #include "partitions.hpp"
 #include "twrpDigest.hpp"
@@ -131,7 +136,7 @@ static int Run_Update_Binary(const char *path, ZipArchive *Zip, int* wipe_cache)
 }
 
 extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
-	int ret_val, zip_verify, md5_return, key_count;
+	int ret_val, zip_verify, md5_return, key_count, loki_enabled;
 	twrpDigest md5sum;
 	string strpath = path;
 	ZipArchive Zip;
@@ -163,5 +168,16 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 		LOGERR("Zip file is corrupt!\n", path);
 		return INSTALL_CORRUPT;
 	}
+
+	#ifdef ENABLE_LOKI
+	DataManager::GetValue(TW_LOKI_SUPPORT_VAR, loki_enabled);
+    if(loki_enabled) {
+       gui_print("Checking if loki-fying is needed");
+       int result;
+       if(result = loki_check()) {
+           return result;
+       }
+    }
+	#endif
 	return Run_Update_Binary(path, &Zip, wipe_cache);
 }

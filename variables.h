@@ -152,6 +152,8 @@
 #define TW_SDEXT_DISABLE_EXT4       "tw_sdext_disable_ext4"
 #define TW_MILITARY_TIME            "tw_military_time"
 
+#define TW_LOKI_SUPPORT_VAR			"loki_support_enabled"
+
 // Also used:
 //   tw_boot_is_mountable
 //   tw_system_is_mountable

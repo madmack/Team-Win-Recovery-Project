@@ -31,6 +31,9 @@
 #include "adb_install.h"
 extern "C" {
 #include "minadbd/adb.h"
+#ifdef ENABLE_LOKI
+#include "compact_loki.h"
+#endif
 }
 
 static RecoveryUI* ui = NULL;
@@ -83,6 +86,7 @@ apply_from_adb(const char* install_file) {
 
     stop_adbd();
     set_usb_driver(true);
+    int loki_enabled;
 /*
     ui->Print("\n\nNow send the package you want to apply\n"
               "to the device with \"adb sideload <filename>\"...\n");
@@ -116,5 +120,17 @@ apply_from_adb(const char* install_file) {
         }
         return -1;
     }
+    #ifdef ENABLE_LOKI
+	DataManager::GetValue(TW_LOKI_SUPPORT_VAR, loki_enabled);
+    if(loki_enabled) {
+       printf("Checking if loki-fying is needed");
+       int result;
+       extern "C" {
+       if(result = loki_check()) {
+           return result;
+       }
+       }
+    }
+	#endif
 	return 0;
 }

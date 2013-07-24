@@ -866,6 +866,7 @@ void DataManager::SetDefaultValues()
 
     mValues.insert(make_pair(TW_REBOOT_AFTER_FLASH_VAR, make_pair("0", 1)));
     mValues.insert(make_pair(TW_SIGNED_ZIP_VERIFY_VAR, make_pair("0", 1)));
+    mValues.insert(make_pair(TW_LOKI_SUPPORT_VAR, make_pair("1", 0)));
     mValues.insert(make_pair(TW_FORCE_MD5_CHECK_VAR, make_pair("0", 1)));
     mValues.insert(make_pair(TW_COLOR_THEME_VAR, make_pair("0", 1)));
     mValues.insert(make_pair(TW_USE_COMPRESSION_VAR, make_pair("0", 1)));
