@@ -169,15 +169,19 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 		return INSTALL_CORRUPT;
 	}
 
+	ret_val = Run_Update_Binary(path, &Zip, wipe_cache);
+
 	#ifdef ENABLE_LOKI
-	DataManager::GetValue(TW_LOKI_SUPPORT_VAR, loki_enabled);
-    if(loki_enabled) {
-       gui_print("Checking if loki-fying is needed");
-       int result;
-       if(result = loki_check()) {
-           return result;
-       }
-    }
+	if (ret_val == INSTALL_SUCCESS) {
+		DataManager::GetValue(TW_LOKI_SUPPORT_VAR, loki_enabled);
+		if(loki_enabled) {
+			gui_print("Checking if loki-fying is needed");
+			int result;
+			if(result = loki_check()) {
+				return result;
+			}
+		}
+	}
 	#endif
-	return Run_Update_Binary(path, &Zip, wipe_cache);
+	return ret_val;
 }
